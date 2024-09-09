@@ -1,3 +1,7 @@
+// Example code filo_seq.go - Sequential Dinning Philosophers
+// Since is sequential, elapsed timne could be simply calculated by (roubnds*philosophers*(time_to_think+time_to_eat))
+// By Cesar De Rose
+
 package main
 
 import (
@@ -5,50 +9,42 @@ import (
 	"time"
 )
 
-const numFilo = 5
+func Philosopher(id, iteration int) {
+	time_to_think := 2
+	time_to_eat := 3
 
-var garfos [numFilo]bool
+	// think
+	for s := 1; s <= id*6; s++ {
+		fmt.Printf(" ")
+	}
+	fmt.Printf(" T%d\n", iteration) // Thinking
+	time.Sleep(time.Duration(time_to_think) * time.Second)
+
+	// eat
+
+	for s := 1; s <= id*6; s++ {
+		fmt.Printf(" ")
+	}
+	fmt.Printf(" E%d\n", iteration) // Eating
+	time.Sleep(time.Duration(time_to_eat) * time.Second)
+}
 
 func main() {
-	for i := 0; i < numFilo; i++ {
-		garfos[i] = true
+	philosophers := 5
+	rounds := 5
+
+	fmt.Println("\n[P1] [P2] [P3] [P4] [P5]\n")
+
+	// run philosophers
+
+	start := time.Now()
+
+	for i := 1; i <= rounds; i++ {
+		for j := 0; j < philosophers; j++ {
+			Philosopher(j, i)
+		}
 	}
+	elapsed := time.Since(start)
 
-	for i := 0; i < numFilo; i++ {
-		filosofo(i)
-	}
-}
-
-func filosofo(id int) {
-	for i := 0; i < 10; i++ {
-		pensa(id)
-		solicitaG(id)
-		come(id)
-		liberaG(id)
-	}
-}
-
-func pensa(id int) {
-	fmt.Printf("Filósofo %d pensando\n", id)
-	time.Sleep(time.Millisecond * 1000)
-}
-
-func come(id int) {
-	fmt.Printf("Filósofo %d comendo\n", id)
-	time.Sleep(time.Millisecond * 1000)
-}
-
-func solicitaG(id int) {
-	for !garfos[id] || !garfos[(id+1)%numFilo] {
-		time.Sleep(time.Millisecond * 10)
-	}
-
-	garfos[id] = false
-	garfos[(id+1)%numFilo] = false
-}
-
-func liberaG(id int) {
-	// Libera os garfos e marca como disponíveis
-	garfos[id] = true
-	garfos[(id+1)%numFilo] = true
+	fmt.Printf("\nSequential Dinner took %s\n\n", elapsed)
 }
