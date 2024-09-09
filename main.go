@@ -40,6 +40,7 @@ func solicitaG(id int) {
 	}
 	available[id] = false
 	available[(id+1)%numFilo] = false
+	time.Sleep(time.Millisecond * 10)
 	garcom.L.Unlock()
 }
 
